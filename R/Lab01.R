@@ -10,7 +10,7 @@ data <- data.frame(
 
 data$tmax = runif(100)*10  + data$tmin
 coeff <- 6
-# A few constantssss
+# A few constants
 tminColor <- "#0000ff"
 tmaxColor <- "#ff0000"
 priceColor <- rgb(0.2, 0.6, 0.9, 1)
