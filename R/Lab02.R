@@ -43,6 +43,7 @@ mypdfdir=paste0(mygitdir,"/pdfs/")
 
 # Get some flow data from my USGS gauge  0422026250 NORTHRUP CREEK AT NORTH GREECE NY
 myflowgage_id="0422026250"
+#myflowgage_id="0205551460" #This is the lick run basin for class commented out most of the time
 myflowgage=get_usgs_gage(myflowgage_id,begin_date = "2015-01-01",
                          end_date = "2019-01-01")
 
@@ -83,7 +84,7 @@ p1= ggplot(BasinData, aes(x=date)) +
   ggtitle(myflowgage$gagename)
 
 p1
-basestr=format(Sys.time(),"/%Y%m%d%H%M")
+basestr=format(Sys.time(),"%Y%m%d%H%M")
 filename=paste0(mypdfdir,basestr,"graph01.pdf")
 pdf(filename)
 plot(p1)
@@ -256,7 +257,7 @@ plot(log(sca))
 system("mpiexec -n 2 threshold -ssa mydemad8.tif -src mydemsrc.tif -thresh 100")
 src=raster("mydemsrc.tif")
 plot(src)
-zoom(src,extent=zoomext2)
+#zoom(src,extent=zoomext2)
 
 # a quick R function to write a shapefile
 makeshape.r=function(sname="shape",n=1)
@@ -306,6 +307,8 @@ plot(src1)
 system("mpiexec -n 2 streamnet -fel mydemfel.tif -p mydemp.tif -ad8 mydemad8.tif -src mydemsrc1.tif -o outlet.shp -ord mydemord.tif -tree mydemtree.txt -coord mydemcoord.txt -net mydemnet.shp -w mydemw.tif")
 plot(raster("mydemord.tif"))
 #zoom(raster("mydemord.tif"))
-plot(raster("mydemw.tif"))
+plot(raster("mydemw.tif"), main="Northrup Creek Watershed in UTM Zone 18",
+     xlab="Meters",
+     ylab="Meters")
 
 
