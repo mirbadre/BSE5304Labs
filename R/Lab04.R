@@ -48,6 +48,7 @@ setwd(datadir)
 #
 myflowgage_id="0205551460"  # Old Friendly Gage
 myflowgage_id="14216500"    # Most Frustrating Gage... lets do it!
+myflowgage_id="0422026250" #My flow gauge from last week
 myflowgage=get_usgs_gage(myflowgage_id,begin_date = "2015-01-01",
                          end_date = "2022-03-01")
 
@@ -273,6 +274,8 @@ mydemw=rast("mydemw.tif")
 mydemw_poly=as.polygons(mydemw,na.rm=T)
 plot(mydemw_poly,add=T,col=rainbow(6))
 
+#Looks like we've only got 1 sub basin
+
 #writeVector(mydemw_poly,dsn=".",layer="mydemw",driver="ESRI Shapefile", overwrite_layer=TRUE)
 writeVector(mydemw_poly, filename="mydemw.shp", filetype="ESRI Shapefile", layer="mydemw", insert=FALSE,
             overwrite=TRUE)
@@ -369,6 +372,7 @@ plot(TIC_terra)
 # 
 
 TMWB=BasinData
+attach(TMWB)
 #
 # Our model will
 # 1) Calculate PET for the basin via Function
@@ -461,7 +465,7 @@ f <- function (x) {
   return(NSE(Qmm,dP^2/(dP+Sest)))
 }
 optimize(f, c(50,500), tol = 0.0001,maximum = TRUE)$maximum
-Sest="WHAT?"
+Sest=optimize(f, c(50,500), tol = 0.0001,maximum = TRUE)$maximum
 plot(dP,Qmm)
 points(dP,dP^2/(dP+Sest),col="red") 
 ########
