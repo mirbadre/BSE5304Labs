@@ -468,9 +468,15 @@ optimize(f, c(50,500), tol = 0.0001,maximum = TRUE)$maximum
 Sest=optimize(f, c(50,500), tol = 0.0001,maximum = TRUE)$maximum
 plot(dP,Qmm)
 points(dP,dP^2/(dP+Sest),col="red") 
+NSE(Qmm,dP^2/(dP+Sest))
 ########
 detach(BasinTMWB_JO)
 
+#Combine optimized winter S months with the TMWBnew df to get the full optimized dataframe for plotting
+TMWBS <- rows_update(TMWBnew, 
+  BasinTMWB_JO,
+  by = "date")
+ 
 #Curve Number
 
 #sourcing in the CNModel function just in case
@@ -485,7 +491,41 @@ mean(CNmodeldf$Qmm)
 
 mean(CNmodeldf$Qpred)
 
+#HW Plots for comparisons
 
+#plot attempt for winter S months w/TMWBnew
+comboplot <- ggplot(TMWBS, aes(x=date)) +
+  geom_line( aes(y=Qpred, color= 'Qpred'), linewidth=1) +
+  geom_line( aes(y=Qmm, color= 'Qmm'), linewidth=1) +
+  theme(legend.position = 'bottom', legend.justification = 'center',
+        legend.box.just='left', legend.background=element_blank()) + 
+  ggtitle(paste0(myflowgage$gagename, " Observed vs. Predicted Flow")) +
+  labs(x ='Date',y="flow", color='Legend')+ theme_bw()
+comboplot
+NSE(TMWBS$Qmm,TMWBS$Qpred)
+
+HWplot1 <- ggplot(TMWBnew, aes(x=date)) +
+  geom_line( aes(y=Qpred, color= 'Qpred'), linewidth=1) +
+  geom_line( aes(y=Qmm, color= 'Qmm'), linewidth=1) +
+  theme(legend.position = 'bottom', legend.justification = 'center',
+        legend.box.just='left', legend.background=element_blank()) + 
+  ggtitle(paste0(myflowgage$gagename, " Observed vs. Predicted Flow")) +
+  labs(x ='Date',y="flow", color='Legend') + theme_bw() + 
+  coord_cartesian( ylim = c(0, 100))#setting smaller axis to get batter view of data
+HWplot1
+
+NSE(TMWBnew$Qmm,TMWBnew$Qpred)
+
+HWplot2 <- ggplot(CNmodeldf, aes(x=date)) +
+  geom_line( aes(y=Qpred, color= 'Qpred'), linewidth=1) +
+  geom_line( aes(y=Qmm, color= 'Qmm'), linewidth=1) +
+  theme(legend.position = 'bottom', legend.justification = 'center',
+        legend.box.just='left', legend.background=element_blank()) + 
+  ggtitle(paste0(myflowgage$gagename, " Observed vs. Predicted Flow")) +
+  labs(x ='Date',y="flow", color='Legend') + theme_bw()
+HWplot2
+
+NSeff(CNmodeldf$Qpred,CNmodeldf$Qmm)
 
 
 
