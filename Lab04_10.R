@@ -772,7 +772,6 @@ plot5 <- ggplot(TIC05, aes(x=date,y=sed)) +geom_point() +theme_bw() + ggtitle('S
   xlab('Date') + ylab('Sediment')
 plot5
 
-
 #Plot time series loss of sediment and total agreggate for each TI, with pusle vlaues based on TI classes
 plot_agg <- ggplot() + geom_point(data=TIC01_p, aes(x=date,y=cumsum(sed), color='TI 1')) + 
   geom_point(data=TIC02_p, aes(x=date,y=cumsum(sed), color='TI 2')) + 
